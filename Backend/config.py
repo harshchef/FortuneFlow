@@ -1,4 +1,8 @@
-MYSQL_HOST = "localhost"
-MYSQL_USER = "root"
-MYSQL_PASSWORD = "Harsh98321234@"
-MYSQL_DATABASE = "xxx"
+# config.py
+
+MYSQL_CONFIG = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'Harsh98321234@',
+    'database': 'xxx'
+}
