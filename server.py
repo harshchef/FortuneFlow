@@ -68,7 +68,7 @@ def transfer_money():
         }
 
         return jsonify(response_data), 200
-
+    
     except mysql.connector.Error as err:
         return jsonify({'error': f"MySQL Error: {err}"}), 500
 
