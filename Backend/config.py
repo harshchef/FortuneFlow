@@ -1,0 +1,4 @@
+MYSQL_HOST = "localhost"
+MYSQL_USER = "root"
+MYSQL_PASSWORD = "Harsh98321234@"
+MYSQL_DATABASE = "xxx"
