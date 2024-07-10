@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify
 import mysql.connector
 import jwt
@@ -139,6 +140,10 @@ def create_user(current_user_id):
         # Fetch the auto-generated user_id
         new_user_id = cursor.lastrowid
 
+        # Inserting into the accounts table
+        cursor.execute("INSERT INTO accounts (user_id, balance) VALUES (%s, %s)", (new_user_id, 0))
+        mydb.commit()
+
         cursor.close()
         mydb.close()
 
@@ -201,10 +206,19 @@ def delete_user(current_user_id, user_id):
             cursor.close()
             mydb.close()
             return jsonify({'error': f'User with ID {user_id} not found'}), 404
+        
+         # Delete the account from the accounts table
+        cursor.execute("DELETE FROM accounts WHERE user_id = %s", (user_id,))
+        mydb.commit()
 
         # Delete the user from the db as it is present
         cursor.execute("DELETE FROM users WHERE user_id = %s", (user_id,))
         mydb.commit()
+
+        # # Delete the account from the accounts table
+        # cursor.execute("DELETE FROM accounts WHERE user_id = %s", (user_id,))
+        # mydb.commit()
+
         cursor.close()
         mydb.close()
 

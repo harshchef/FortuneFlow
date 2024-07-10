@@ -1,3 +1,4 @@
+
 from flask import Blueprint, request, jsonify
 import jwt
 import bcrypt
@@ -96,6 +97,11 @@ def delete_user(user_id):
         # Delete transactions associated with the user
         delete_transactions_query = "DELETE FROM transactions WHERE sender_id = %s OR receiver_id = %s"
         cursor.execute(delete_transactions_query, (user_id, user_id))
+        mydb.commit()
+
+        # Delete the user's account from the accounts table
+        delete_accounts_query = "DELETE FROM accounts WHERE user_id = %s"
+        cursor.execute(delete_accounts_query, (user_id,))
         mydb.commit()
 
         # Delete the user from the database
