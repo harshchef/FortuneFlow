@@ -1,18 +1,10 @@
 from flask import Flask, request, jsonify
 import mysql.connector
 import bcrypt
-
+from database import get_db_connection
 app = Flask(__name__)
 
-# MySQL Connection
-def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Harsh98321234@",
-        database="xxx4"
 
-    )
 
 # Endpoint to register a new admin
 @app.route('/admin/register', methods=['POST'])
@@ -25,7 +17,7 @@ def register_admin():
 
     # Hash the password
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
+    
     mydb = get_db_connection()
     cursor = mydb.cursor()
 

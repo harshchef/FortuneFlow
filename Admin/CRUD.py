@@ -3,19 +3,10 @@ import mysql.connector
 import jwt
 from functools import wraps
 import bcrypt
+from database import get_db_connection
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-
-# MySQL Connection
-def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Harsh98321234@",
-        database="xxx4"
-    )
-
 
 def admin_token_required(f):
     @wraps(f)
