@@ -1,5 +1,5 @@
-Create Database xxx;
-use xxx;
+CREATE DATABASE xxx4;
+USE xxx4;
 
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,23 +32,41 @@ CREATE TABLE IF NOT EXISTS exchange_rates (
     UNIQUE KEY (base_currency, target_currency)
 );
 
+ALTER TABLE users
+
+ADD COLUMN fullname VARCHAR(255) AFTER password;
+
+ 
 
 
-INSERT INTO transactions (sender_id, receiver_id, amount, sender_currency, receiver_currency, exchange_rate, converted_amount)
-VALUES
-    (1, 2, 100.00, 'USD', 'EUR', 0.85, 85.00),
-    (2, 1, 50.00, 'EUR', 'USD', 1.18, 59.00),
-    (3, 2, 75.00, 'GBP', 'EUR', 1.10, 82.50);
-INSERT INTO users (username, email, password, country_of_residence)
-VALUES
-    ('John Doe', 'john@example.com', 'password123', 'USA'),
-    ('Jane Smith', 'jane@example.com', 'password456', 'Canada'),
-    ('Mike Johnson', 'mike@example.com', 'password789', 'UK');
+CREATE TABLE IF NOT EXISTS accounts (
+    user_id INT PRIMARY KEY,
+    balance DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+select * from users;
 
 
+CREATE TABLE admin (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    full_name VARCHAR(200)
+);
+
+INSERT INTO admin (name, email, password, full_name) VALUES
+('admin1', 'admin1@example.com', 'password1', 'Admin One'),
+('admin2', 'admin2@example.com', 'password2', 'Admin Two'),
+('admin3', 'admin3@example.com', 'password3', 'Admin Three');
+
+select * from admin;
 
 drop table exchange_rates;
 drop table transactions;
+drop table accounts;
 drop table users;
 select * from transactions;
+select * from users;
+select* from accounts
 
