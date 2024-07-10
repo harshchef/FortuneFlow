@@ -1,0 +1,31 @@
+[
+    {
+      "username": "emma_jones",
+      "email": "emma@example.com",
+      "password": "emma123",
+      "fullname": "Emma Jones",
+      "country_of_residence": "USA"
+    },
+    {
+      "username": "michael_smith",
+      "email": "michael@example.com",
+      "password": "smith456",
+      "fullname": "Michael Smith",
+      "country_of_residence": "Canada"
+    },
+    {
+      "username": "sophia_wang",
+      "email": "sophia@example.com",
+      "password": "sophia789",
+      "fullname": "Sophia Wang",
+      "country_of_residence": "UK"
+    },
+    {
+      "username": "oliver_brown",
+      "email": "oliver@example.com",
+      "password": "brown123",
+      "fullname": "Oliver Brown",
+      "country_of_residence": "Australia"
+    }
+  ]
+  

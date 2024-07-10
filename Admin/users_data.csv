@@ -1,0 +1,11 @@
+username,email,password,fullname,country_of_residence
+John Doe,john.doe@example.com,password123,John Doe,USA
+Jane Smith,jane.smith@example.com,password456,Jane Smith,Canada
+Mike Johnson,mike.johnson@example.com,password789,Mike Johnson,UK
+Alice Brown,alice.brown@example.com,abc123,Alice Brown,Australia
+Bob Green,bob.green@example.com,xyz456,Bob Green,Germany
+Emily White,emily.white@example.com,qwerty789,Emily White,France
+David Lee,david.lee@example.com,pass123,David Lee,Japan
+Sarah Taylor,sarah.taylor@example.com,letmein456,Sarah Taylor,Spain
+Michael Clark,michael.clark@example.com,password987,Michael Clark,Italy
+Linda Wilson,linda.wilson@example.com,secure123,Linda Wilson,Sweden
