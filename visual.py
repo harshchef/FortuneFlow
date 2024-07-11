@@ -3,10 +3,9 @@ import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
 import plotly.express as px
  
-# Connect to the MySQL database
+# Connect to MySQL database
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -14,27 +13,45 @@ conn = mysql.connector.connect(
     database="xxx4"
 )
  
-# Read data from the MySQL database into a DataFrame
+# Read data from MySQL into DataFrames
 df = pd.read_sql_query("SELECT * FROM transactions", con=conn)
+df1 = pd.read_sql_query("SELECT * FROM users", con=conn)
  
-# Convert transaction_date to datetime
+# Data processing for banking management system dashboard
 df['transaction_date'] = pd.to_datetime(df['transaction_date'])
 df['hour'] = df['transaction_date'].dt.hour
- 
-# Generate hourly transactions data
 hourly_transactions = df['hour'].value_counts().sort_index()
- 
-# Create pivot table for heatmap
 pivot = df.pivot_table(values='exchange_rate', index='hour', columns='transaction_date', aggfunc='mean')
+ 
+# Data processing for user analytics dashboard
+country_counts = df1['country_of_residence'].value_counts()
+df1['email_provider'] = df1['email'].apply(lambda x: x.split('@')[1])
+email_provider_counts = df1['email_provider'].value_counts()
+ 
+# Function to categorize time of day
+def categorize_time(hour):
+    if 0 <= hour < 6:
+        return 'Night'
+    elif 6 <= hour < 12:
+        return 'Morning'
+    elif 12 <= hour < 18:
+        return 'Afternoon'
+    else:
+        return 'Evening'
+ 
+df['time_of_day'] = df['hour'].apply(categorize_time)
+transaction_volume_by_time = df['time_of_day'].value_counts().sort_index()
  
 # Dash app initialization
 app = dash.Dash(__name__)
  
-# Define layout of the dashboard
+# Define layout
 app.layout = html.Div([
-    html.H1("Banking Management System Dashboard"),
-   
+    html.H1("Banking Management and User Analytics Dashboard"),
+ 
+    # Banking Management System Dashboard Components
     html.Div([
+        html.H2("Banking Management System Dashboard"),
         dcc.Graph(id='hourly-transactions',
                   figure={
                       'data': [
@@ -46,23 +63,17 @@ app.layout = html.Div([
                           'yaxis': {'title': 'Number of Transactions'},
                       }
                   }),
-    ]),
-   
-    html.Div([
         dcc.Graph(id='transaction-volume-over-time',
                   figure={
                       'data': [
-                          {'x': df['transaction_date'], 'y': df['transaction_date'].value_counts().sort_index(), 'type': 'line', 'name': 'Transaction Volume Over Time'},
+                          {'x': transaction_volume_by_time.index, 'y': transaction_volume_by_time.values, 'type': 'line', 'name': 'Transaction Volume Over Time'},
                       ],
                       'layout': {
                           'title': 'Transaction Volume Over Time',
-                          'xaxis': {'title': 'Transaction Date'},
+                          'xaxis': {'title': 'Time of Day'},
                           'yaxis': {'title': 'Number of Transactions'},
                       }
                   }),
-    ]),
-   
-    html.Div([
         dcc.Graph(id='sender-vs-receiver-transactions',
                   figure={
                       'data': [
@@ -74,9 +85,6 @@ app.layout = html.Div([
                           'yaxis': {'title': 'Receiver ID'},
                       }
                   }),
-    ]),
-   
-    html.Div([
         dcc.Graph(id='histogram-converted-amounts',
                   figure={
                       'data': [
@@ -88,9 +96,6 @@ app.layout = html.Div([
                           'yaxis': {'title': 'Frequency'},
                       }
                   }),
-    ]),
-   
-    html.Div([
         dcc.Graph(id='exchange-rate-heatmap',
                   figure={
                       'data': [
@@ -103,8 +108,43 @@ app.layout = html.Div([
                       }
                   }),
     ]),
+ 
+    # User Analytics Dashboard Components
+    html.Div([
+        html.H2("User Analytics Dashboard"),
+        dcc.Graph(id='country-bar',
+                  figure={
+                      'data': [
+                          {'x': country_counts.index, 'y': country_counts.values, 'type': 'bar', 'name': 'Country of Residence'}
+                      ],
+                      'layout': {
+                          'title': 'User Distribution by Country',
+                          'xaxis': {'title': 'Country of Residence'},
+                          'yaxis': {'title': 'Number of Users'}
+                      }
+                  }),
+        dcc.Graph(id='country-pie',
+                  figure={
+                      'data': [
+                          {'labels': country_counts.index, 'values': country_counts.values, 'type': 'pie', 'name': 'Country of Residence'}
+                      ],
+                      'layout': {
+                          'title': 'User Distribution by Country',
+                      }
+                  }),
+        dcc.Graph(id='email-provider-bar',
+                  figure={
+                      'data': [
+                          {'x': email_provider_counts.index, 'y': email_provider_counts.values, 'type': 'bar', 'name': 'Email Provider'}
+                      ],
+                      'layout': {
+                          'title': 'Email Providers Distribution',
+                          'xaxis': {'title': 'Email Provider'},
+                          'yaxis': {'title': 'Number of Users'}
+                      }
+                  }),
+    ]),
 ])
  
 if __name__ == '__main__':
     app.run_server(debug=True)
- 
