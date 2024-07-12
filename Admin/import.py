@@ -12,7 +12,7 @@ app = Flask(__name__)
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'Harsh98321234@',
+    'password': 'yourpassword',
     'database': 'xxx4', # Replace with your database name
     'auth_plugin': 'mysql_native_password'  # Specify the authentication plugin
 }
